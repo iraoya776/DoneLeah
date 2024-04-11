@@ -10,6 +10,9 @@ function AppProvider({ children }) {
   const [userInfo, setUserInfo] = useState("");
   const [targetID, setTargetID] = useState("");
   const [allTargets, setAllTargets] = useState([]);
+  const [allCategory, setAllCategory] = useState("");
+  const [groupInfo, setGroupInfo] = useState("");
+  const [wishlistColour, setWishlistColour] = useState("black");
 
   return (
     <AppContext.Provider
@@ -28,6 +31,12 @@ function AppProvider({ children }) {
         setTargetID,
         allTargets,
         setAllTargets,
+        allCategory,
+        setAllCategory,
+        wishlistColour,
+        setWishlistColour,
+        groupInfo,
+        setGroupInfo,
       }}
     >
       {children}

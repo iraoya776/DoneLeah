@@ -4,20 +4,26 @@ import { IntroScreen } from "../Screens/Intro";
 import { HomeScreen } from "../Screens/HomeScreen";
 import { Login } from "../Screens/Login";
 import { SignUp } from "../Screens/SignUp";
-import { Appliances } from "../Screens/Appliances";
-import { Furnitures } from "../Screens/Furnitures";
-import { Fashion } from "../Screens/Fashion";
-import { Groceries } from "../Screens/Groceries";
-import { Beauty } from "../Screens/Beauty";
-import { GameTech } from "../Screens/GameTech";
-import { PetAndSupplies } from "../Screens/PetAndSupplies";
-import { Donations } from "../Screens/Donations";
-import { Shop } from "../Screens/Shop";
-import { Devices } from "../Screens/Devices";
-import { Help } from "../Screens/Help";
-import { Sell } from "../Screens/Sell";
 import { Profile } from "../Screens/Profile";
 import { EditProfile } from "../Screens/EditProfile";
+import { SearchScreen } from "../Screens/SearchScreen";
+import { Category } from "../Screens/Categories";
+import { TargetDetails } from "../Screens/TargetDetails";
+import { Cart } from "../Screens/Cart";
+import { TargetForm } from "../Screens/TargetForm";
+import { CartTargetForm } from "../Screens/CartTargetForm";
+import { Wishlist } from "../Screens/WishList";
+import { SetTargetDetails } from "../Screens/SetTargetDetails";
+import { CreateTarget } from "../Screens/CreateTarget";
+import { ActiveTargets } from "../Screens/ActiveTargets";
+import { TargetCheckout } from "../Screens/TargetCheckout";
+import { ChangePassword } from "../Screens/ChangePassword";
+import { Pay2 } from "../Screens/Pay2";
+import { History } from "../Screens/History";
+import { Orders } from "../Screens/Orders";
+import { DeleteAccount } from "../Screens/DeleteAccount";
+import { Deleted } from "../Screens/DeletedPage";
+import { LeahInfo } from "../Screens/LeahInfo";
 
 const Stack = createNativeStackNavigator();
 //https://reactnavigation.org/docs/hello-react-navigation
@@ -33,20 +39,26 @@ export function StackNavigator() {
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Devices" component={Devices} />
-        <Stack.Screen name="Appliances" component={Appliances} />
-        <Stack.Screen name="Furnitures" component={Furnitures} />
-        <Stack.Screen name="Fashion" component={Fashion} />
-        <Stack.Screen name="Groceries" component={Groceries} />
-        <Stack.Screen name="Beauty" component={Beauty} />
-        <Stack.Screen name="GameTech" component={GameTech} />
-        <Stack.Screen name="PetAndSupplies" component={PetAndSupplies} />
-        <Stack.Screen name="Donations" component={Donations} />
-        <Stack.Screen name="Shop" component={Shop} />
-        <Stack.Screen name="Help" component={Help} />
-        <Stack.Screen name="Sell" component={Sell} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        <Stack.Screen name="Category" component={Category} />
+        <Stack.Screen name="TargetDetails" component={TargetDetails} />
+        <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen name="TargetForm" component={TargetForm} />
+        <Stack.Screen name="CartTargetForm" component={CartTargetForm} />
+        <Stack.Screen name="Wishlist" component={Wishlist} />
+        <Stack.Screen name="SetTargetDetails" component={SetTargetDetails} />
+        <Stack.Screen name="CreateTarget" component={CreateTarget} />
+        <Stack.Screen name="ActiveTargets" component={ActiveTargets} />
+        <Stack.Screen name="TargetCheckout" component={TargetCheckout} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="Pay2" component={Pay2} />
+        <Stack.Screen name="History" component={History} />
+        <Stack.Screen name="Orders" component={Orders} />
+        <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
+        <Stack.Screen name="Deleted" component={Deleted} />
+        <Stack.Screen name="LeahInfo" component={LeahInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );

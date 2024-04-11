@@ -1,12 +1,17 @@
 export const Themes = {
   colors: {
-    primary1: "navy",
-    primary: "#D04848",
-    redDark: "#A94438",
-    redMedium: "#D24545",
-    red: "#B80000",
+    primary1: "#1F2544",
+    primary: "#2F80ED",
+    blueLight: "#CCE0F0",
+    blueMedium: "#2F80ED",
+    blueDark: "#53b8ee",
+    green: "#3bb75e",
+    greenDark: "#0E4D2B",
+    greenMedium: "#50C878",
+    greenLight: "#B7E4C7",
+    text: "#00000099",
+    red: "#be0000",
   },
-
   fonts: {
     brand: "Pacifico_400Regular",
     text100: "Raleway_100Thin",

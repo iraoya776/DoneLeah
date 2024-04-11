@@ -25,7 +25,7 @@ import { AppContext } from "../Components/globalVariables";
 
 const validation = yup.object({
   email: yup.string().required().email("Enter a valid email").min(5).max(30),
-  password: yup.string().required().min(8).max(20),
+  password: yup.string(),
 });
 
 export function Login({ navigation, route }) {
@@ -64,9 +64,12 @@ export function Login({ navigation, route }) {
                 .catch((error) => {
                   setPreloader(false);
                   // console.log(typeof error.code)
-                  Alert.alert("Message!", "Invalid email or password", [
-                    { text: "Try Again" },
-                  ]);
+                  Alert.alert(
+                    "Invalid email or password!",
+                    "please make sure to enter a verified email address or password",
+                    [{ text: "Try Again" }]
+                  );
+                  console.log(error);
                 });
             }}
             validationSchema={validation}
@@ -76,6 +79,7 @@ export function Login({ navigation, route }) {
                 <View style={styles.design}>
                   <TextInput
                     style={styles.inputDesign}
+                    inputMode="email"
                     autoCapitalize="none"
                     placeholder="Enter email"
                     onChangeText={prop.handleChange("email")}
@@ -98,7 +102,7 @@ export function Login({ navigation, route }) {
                     style={styles.inputDesign}
                     placeholder="Enter Password"
                     secureTextEntry
-                    autoCapitalize="none"
+                    autoCapitalize="words"
                     onChangeText={prop.handleChange("password")}
                     onBlur={prop.handleBlur("password")}
                     value={prop.values.password}
@@ -178,28 +182,29 @@ const styles = StyleSheet.create({
   inputDesign: {
     borderColor: "gray",
     borderWidth: 1,
-    padding: 15,
+    padding: 3,
     marginBottom: 10,
     borderRadius: 10,
     width: "100%",
-    fontSize: 20,
+    fontSize: 18,
   },
   input: {
     //backgroundColor: "red",
-    width: 130,
+    width: 140,
   },
   txt: {
     color: Themes.colors.primary1,
     fontSize: 16,
+    fontFamily: Themes.fonts.text400,
     marginBottom: 15,
   },
   touch: {
     borderWidth: 1,
     borderColor: Themes.colors.primary,
-    padding: 10,
+    padding: 7,
     marginVertical: 5,
     alignItems: "center",
-    borderRadius: 40,
+    borderRadius: 10,
     width: "100%",
     backgroundColor: Themes.colors.primary,
   },

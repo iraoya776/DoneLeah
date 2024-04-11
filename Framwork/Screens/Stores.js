@@ -1,6 +1,5 @@
 import "react-native-gesture-handler";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
+import { useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,15 +15,51 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from "react-native";
+import { AppContext } from "../Components/globalVariables";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faArrowLeft,
+  faBowlFood,
+  faCar,
+  faChair,
+  faChild,
+  faDog,
+  faGamepad,
+  faGlasses,
+  faL,
+  faMobile,
+  faPlug,
+  faQuestion,
+  faShirt,
+} from "@fortawesome/free-solid-svg-icons";
+import { Themes } from "../Components/Themes";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { CreateStores } from "./CreateStores";
 
-export function MyHelp({ navigation }) {
+function MyStore() {
+  const {
+    userUID,
+    setUserInfo,
+    userInfo,
+    setPreloader,
+    setAllTargets,
+    setDocID,
+  } = useContext(AppContext);
+
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView>
-        <View style={styles.container}>
-          <Text>Help</Text>
+      <View style={styles.container}>
+        <View
+          style={{ flexDirection: "row", alignItems: "center", columnGap: 70 }}
+        >
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <FontAwesomeIcon icon={faArrowLeft} size={22} />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 18 }}>My Store </Text>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -38,13 +73,17 @@ export function CustomDrawerContent({ navigation }) {
           style={{ width: "100%", height: "100%" }}
         >
           <TouchableOpacity onPress={() => navigation.navigate("MyStore")}>
-            <Text style={{ fontSize: 18 }}>My store</Text>
+            <Text style={{ fontSize: 18, fontFamily: Themes.fonts.text700 }}>
+              My store
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ marginTop: 10 }}
             onPress={() => navigation.navigate("CreateStore")}
           >
-            <Text style={{ fontSize: 18 }}>Create Store</Text>
+            <Text style={{ fontSize: 18, fontFamily: Themes.fonts.text700 }}>
+              Create Store
+            </Text>
           </TouchableOpacity>
         </ImageBackground>
       </View>
@@ -54,7 +93,7 @@ export function CustomDrawerContent({ navigation }) {
 
 const Drawer = createDrawerNavigator();
 
-export function Help() {
+export function Stores() {
   return (
     <NavigationContainer independent={true}>
       <Drawer.Navigator
@@ -71,7 +110,8 @@ export function Help() {
           //options={{ headerShown: false }}
         /> */}
 
-        <Drawer.Screen name="MyHelp" component={MyHelp} />
+        <Drawer.Screen name="MyStore" component={MyStore} />
+        <Drawer.Screen name="CreateStore" component={CreateStores} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

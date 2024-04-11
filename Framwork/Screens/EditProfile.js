@@ -14,11 +14,13 @@ import {
   Alert,
   KeyboardAvoidingView,
   Modal,
+  Dimensions,
 } from "react-native";
 import { AppContext } from "../Components/globalVariables";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faArrowLeft,
+  faArrowLeftLong,
   faCamera,
   faCameraRetro,
   faChevronLeft,
@@ -29,6 +31,8 @@ import { Themes } from "../Components/Themes";
 import { db } from "../../Firebase/Settings";
 import { doc, updateDoc } from "firebase/firestore";
 import * as ImagePicker from "expo-image-picker";
+import { verifyBeforeUpdateEmail } from "firebase/auth";
+import { Picker } from "@react-native-picker/picker";
 
 export function EditProfile({ navigation }) {
   const {
@@ -39,14 +43,13 @@ export function EditProfile({ navigation }) {
     setAllTargets,
     setDocID,
   } = useContext(AppContext);
-
   const [firstName, setFirstName] = useState(userInfo.firstName);
   const [lastName, setLastName] = useState(userInfo.lastName);
   const [gender, setGender] = useState(userInfo.gender);
-  const [address, setAddress] = useState(userInfo.address);
-  const [mobile, setMobile] = useState(userInfo.phone);
-  const [email, setEmail] = useState();
-  const [userName, setUserName] = useState(userInfo.userName);
+  //const [address, setAddress] = useState(userInfo.address);
+  //const [mobile, setMobile] = useState(userInfo.phone);
+  const [email, setEmail] = useState(userInfo.email);
+  //const [userName, setUserName] = useState(userInfo.userName);
   const [image, setImage] = useState(userInfo.image);
   const [modalVisibility, setModalVisibility] = useState(false);
   const [preVisibility, setpreVisibility] = useState(false);
@@ -82,19 +85,18 @@ export function EditProfile({ navigation }) {
     updateDoc(doc(db, "users", userUID), {
       firstName,
       lastName,
-      phone: mobile,
-      userName,
+      //phone: mobile,
+      //userName,
       gender,
-      address,
-      image,
-      //email,
+      //address,
+      image: image,
+      email,
     })
       .then(() => {
         setPreloader(false);
         Alert.alert("Edit Profile", "Profile has been updated successfully");
       })
       .catch((error) => {
-        // console.log(typeof error.code)
         setPreloader(false);
         Alert.alert("Message!", "something went wrong", [
           { text: "Try Again" },
@@ -120,27 +122,34 @@ export function EditProfile({ navigation }) {
       <ScrollView>
         <View style={styles.container}>
           <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            behavior={
+              Platform.OS === "ios"
+                ? "padding"
+                : "height" && Platform.OS === "android"
+                ? "padding"
+                : "height"
+            }
           >
-            {/* <Text style={{ textAlign: "center", fontSize: 20 }}>
-              Leah Cares For You...
-            </Text> */}
             <View style={styles.firstView}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.goBack({
-                    userInfo,
-                  });
+                  navigation.goBack();
                 }}
               >
-                <FontAwesomeIcon icon={faChevronLeft} size={20} />
+                <FontAwesomeIcon icon={faArrowLeftLong} size={22} />
               </TouchableOpacity>
-              <Text style={{ fontSize: 18 }}> {} Profile</Text>
+              <Text style={{ fontSize: 18, fontFamily: Themes.fonts.text800 }}>
+                {" "}
+                {} Profile
+              </Text>
             </View>
-            <View style={{ alignSelf: "center" }}>
+
+            <View style={{ alignItems: "center" }}>
               <Image
                 source={{
-                  uri: image,
+                  uri:
+                    image ||
+                    "https://img.freepik.com/free-vector/gradient-l-logo-template_23-2149372723.jpg?w=740&t=st=1707945826~exp=1707946426~hmac=52255321e83d06c488a7391b9f4f0917842b7126f6a4bc83979216262905fc6d",
                 }}
                 style={styles.img}
               />
@@ -149,14 +158,24 @@ export function EditProfile({ navigation }) {
                 style={{
                   position: "absolute",
                   bottom: 0,
-                  left: 95,
+                  left: 180,
                 }}
               >
-                <FontAwesomeIcon icon={faCamera} size={25} />
+                <FontAwesomeIcon
+                  icon={faCamera}
+                  size={30}
+                  style={{ color: Themes.colors.primary }}
+                />
               </TouchableOpacity>
             </View>
 
-            <View style={{ marginVertical: 5 }}>
+            <View
+              style={{
+                marginVertical: 5,
+                //borderWidth: 1,
+                height: Dimensions.get("screen").height * 0.6,
+              }}
+            >
               <Text style={styles.txt}>First Name</Text>
               <TextInput
                 keyboardType="default"
@@ -175,43 +194,56 @@ export function EditProfile({ navigation }) {
                 onChangeText={(text) => setLastName(text.trim())}
                 value={lastName}
               />
-              <Text style={styles.txt}>Mobile Number</Text>
+              {/* <Text style={styles.txt}>Mobile Number</Text>
               <TextInput
                 style={styles.input}
                 keyboardType="number-pad"
                 placeholder={userInfo.phone}
                 onChangeText={(text) => setMobile(text.trim())}
                 value={mobile}
-              />
-              <Text style={styles.txt}>userName</Text>
+              /> */}
+              {/* <Text style={styles.txt}>userName</Text>
               <TextInput
                 style={styles.input}
                 placeholder={userInfo.userName}
                 autoCapitalize="none"
                 onChangeText={(text) => setUserName(text.trim())}
                 value={userName}
-              />
-              <Text style={styles.txt}>Gender</Text>
-              <TextInput
+              /> */}
+              {/* <TextInput
                 style={styles.input}
                 keyboardType="default"
                 placeholder={userInfo.gender}
                 onChangeText={(text) => setGender(text.trim())}
                 value={gender}
-              />
+              /> */}
+              <View style={{ borderWidth: 1, borderRadius: 10 }}>
+                <Text style={{ fontFamily: Themes.fonts.text400 }}>Gender</Text>
+                <Picker
+                  selectedValue={gender}
+                  onValueChange={(itemValue) => setGender(itemValue)}
+                >
+                  <Picker.Item label="Male" value="Male" />
+                  <Picker.Item label="Female" value="Female" />
+                </Picker>
+              </View>
               <Text style={styles.txt}>Email</Text>
-              <TextInput style={styles.input} value={userInfo.email} />
-              <Text style={{ color: Themes.colors.primary }}>
-                email cannot be changed
-              </Text>
-              <Text style={styles.txt}>Address</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => setEmail(text.trim())}
+                value={email}
+                keyboardType="email-address"
+                placeholder={userInfo.email}
+              />
+
+              {/* <Text style={styles.txt}>Address</Text>
               <TextInput
                 style={styles.input}
                 keyboardType="default"
                 placeholder={userInfo.address}
                 onChangeText={(text) => setAddress(text.trim())}
                 value={address}
-              />
+              /> */}
             </View>
 
             <TouchableOpacity style={styles.lastBtn} onPress={editProfile}>
@@ -219,7 +251,7 @@ export function EditProfile({ navigation }) {
                 style={{
                   textAlign: "center",
                   color: "white",
-                  fontFamily: Themes.fonts.text700,
+                  fontFamily: Themes.fonts.text800,
                   fontSize: 18,
                 }}
               >
@@ -277,7 +309,7 @@ export function EditProfile({ navigation }) {
                 <FontAwesomeIcon
                   icon={faImage}
                   size={25}
-                  style={{ color: Themes.colors.redMedium }}
+                  style={{ color: Themes.colors.primary }}
                 />
                 <Text style={{ fontSize: 15, color: "white" }}>
                   {" "}
@@ -332,31 +364,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    columnGap: 20,
   },
   img: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 80,
-    borderWidth: 1,
-    borderColor: "black",
+    //borderWidth: 1,
+    //borderColor: "black",
   },
   lastBtn: {
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 40,
-    borderColor: Themes.colors.primary,
+    //borderWidth: 1,
+    padding: 7,
+    borderRadius: 10,
+    //borderColor: Themes.colors.primary,
     backgroundColor: Themes.colors.primary,
     marginTop: 15,
   },
   txt: {
-    fontSize: 17,
+    //fontSize: 17,
     fontFamily: Themes.fonts.text400,
   },
   input: {
     borderWidth: 1,
-    padding: 10,
-    borderColor: Themes.colors.primary,
+    padding: 3,
+    //borderColor: Themes.colors.primary,
     borderRadius: 10,
     fontSize: 18,
+    marginBottom: 5,
   },
 });
