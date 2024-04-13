@@ -445,7 +445,7 @@ export function Cart() {
           justifyContent: "space-between",
           //borderTopWidth: 1,
           //backgroundColor: Themes.colors.blueMedium,
-          display: permit === true ? "none" : "flex",
+          //display: permit === true ? "none" : "flex",
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -463,7 +463,8 @@ export function Cart() {
             backgroundColor: Themes.colors.primary,
             borderRadius: 10,
             width: 160,
-            display: targetInvolved !== true ? "none" : "flex",
+            //display: targetInvolved !== true ? "none" : "flex",
+            display: permit === true ? "none" : "flex",
           }}
         >
           <Text

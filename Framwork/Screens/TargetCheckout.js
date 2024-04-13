@@ -65,7 +65,11 @@ export function TargetCheckout() {
   useEffect(() => {
     const getQ = async () => {
       const q = collection(db, "targetDetails");
-      const filter = query(q, where("userUID", "==", userUID));
+      const filter = query(
+        q,
+        where("userUID", "==", userUID),
+        where("targetName", "==", targetName)
+      );
       const querySnapshot = await getDocs(filter);
       const allData = [];
       querySnapshot.forEach((all) => {
@@ -87,13 +91,13 @@ export function TargetCheckout() {
 
   async function validatePay() {
     const q = collection(db, "orders");
-    const filter = query(q, where("userUID", "==", userUID));
+    const filter = query(q, where("targetName", "==", targetName));
     const querySnapshot = await getDocs(filter);
     if (querySnapshot.empty === false) {
       Alert.alert(
         "Message!",
         "Order has already been processed and set for delivery",
-        [{ text: "Ok" }]
+        [{ text: "Ok", onPress: navigation.navigate("Orders") }]
       );
     } else if (total - amountRaised <= 0) {
       navigation.navigate("TargetForm", { targetName, total, goodsPrice });
@@ -211,7 +215,7 @@ export function TargetCheckout() {
               textAlign: "center",
             }}
           >
-            Continue
+            {remainingBalance > 0 ? "Continue" : "Order Now"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -253,14 +257,28 @@ export function TargetCheckout() {
                   amount: "",
                 }}
                 onSubmit={(value) => {
-                  navigation.navigate("Pay2", {
-                    amount: Number(value.amount * 0.018) + Number(value.amount),
-                    targetName,
-                    total,
-                    deliveryFee,
-                    interest: Number(value.amount) * 0.018,
-                    goodsPrice,
-                  });
+                  //if (total >= Number(value.amount) ) {
+                  if (
+                    amountRaised +
+                      (Number(value.amount) * 0.018 + Number(value.amount)) <=
+                    total * 0.018 + total
+                  ) {
+                    navigation.navigate("Pay2", {
+                      amount:
+                        Number(value.amount * 0.018) + Number(value.amount),
+                      targetName,
+                      total,
+                      deliveryFee,
+                      interest: Number(value.amount) * 0.018,
+                      goodsPrice,
+                    });
+                    //console.log("Good");
+                  } else {
+                    Alert.alert(
+                      "Unsuccessful",
+                      `₦ ${value.amount} too large for remaining ₦ ${remainingBalance} target price`
+                    );
+                  }
                 }}
                 validationSchema={validation}
               >

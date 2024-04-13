@@ -53,10 +53,10 @@ export function History() {
       querySnapshot.forEach((all) => {
         allData.push(all.data());
       });
-      const refresh = allData.sort((a, b) => {
-        a.createdAt - b.createdAt;
+      allData.sort((a, b) => {
+        b.createdAt - a.createdAt;
       });
-      setUpdates(refresh);
+      setUpdates(allData);
     }
     getQ();
   });
@@ -82,7 +82,7 @@ export function History() {
                 display: permit !== true ? "none" : "flex",
               }}
             >
-              Welcome, {userInfo.firstName}
+              Transaction History
             </Text>
           </View>
           <View

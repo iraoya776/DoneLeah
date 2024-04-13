@@ -24,6 +24,7 @@ import { Orders } from "../Screens/Orders";
 import { DeleteAccount } from "../Screens/DeleteAccount";
 import { Deleted } from "../Screens/DeletedPage";
 import { LeahInfo } from "../Screens/LeahInfo";
+import { ForgotPasword } from "../Screens/ForgotPassword";
 
 const Stack = createNativeStackNavigator();
 //https://reactnavigation.org/docs/hello-react-navigation
@@ -59,6 +60,7 @@ export function StackNavigator() {
         <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
         <Stack.Screen name="Deleted" component={Deleted} />
         <Stack.Screen name="LeahInfo" component={LeahInfo} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasword} />
       </Stack.Navigator>
     </NavigationContainer>
   );

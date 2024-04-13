@@ -58,14 +58,19 @@ export function Pay2() {
   const route = useRoute();
   const { amount, targetName, total, deliveryFee, interest } = route.params;
   const [contsructedBalance, setConstructedBalance] = useState(0);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
     async function getQ() {
       const q = collection(db, "targetDetails");
       const filter = query(q, where("targetName", "==", targetName));
+
+      const e = collection(db, "users");
+      const filter2 = query(e, where("userUID", "==", userUID));
+      const querySnapshot2 = await getDocs(filter2);
+
       const querySnapshot = await getDocs(filter);
       const allData = [];
-
       querySnapshot.forEach((all) => {
         allData.push(all.data());
       });
@@ -73,6 +78,16 @@ export function Pay2() {
         return all + items.amount;
       }, 0);
       setConstructedBalance(sum);
+
+      const allDocs = [];
+      querySnapshot2.forEach((all) => {
+        allDocs.push(all.data());
+      });
+
+      const sum2 = allDocs.reduce((all, items) => {
+        return all + items.balance;
+      }, 0);
+      setBalance(sum2);
     }
     getQ();
   });
@@ -110,8 +125,6 @@ export function Pay2() {
                   });
                 }}
                 onSuccess={(res) => {
-                  //navigation.goBack();
-
                   const myDocumentData = {
                     targetName,
                     amount: Number(amount) - Number(interest),
@@ -128,30 +141,32 @@ export function Pay2() {
                       Toast.show("Transaction Approved!!", {
                         duration: Toast.durations.LONG,
                       });
+                      navigation.goBack();
                     })
                     .catch(() => {
                       setPreloader(false);
                       Toast.show("Transaction Declined!!", {
                         duration: Toast.durations.LONG,
                       });
+                      navigation.goBack();
                       //console.log("unsuccessful");
                     });
 
-                  const myDocumentData2 = {
-                    balance: contsructedBalance + Number(myDocumentData.amount),
-                  };
-                  const docRef = doc(db, "users", userUID);
-                  setPreloader(false);
-                  setDoc(docRef, myDocumentData2, { merge: true })
-                    .then(() => {
-                      setPreloader(false);
-                      navigation.goBack();
-                      //console.log("successful");
-                    })
-                    .catch(() => {
-                      setPreloader(false);
-                      //console.log("unsuccessful");
-                    });
+                  // const myDocumentData2 = {
+                  //   balance: contsructedBalance + Number(myDocumentData.amount),
+                  // };
+                  // const docRef = doc(db, "users", userUID);
+                  // setPreloader(false);
+                  // setDoc(docRef, myDocumentData2, { merge: true })
+                  //   .then(() => {
+                  //     setPreloader(false);
+                  //     navigation.goBack();
+                  //     //console.log("successful");
+                  //   })
+                  //   .catch(() => {
+                  //     setPreloader(false);
+                  //     //console.log("unsuccessful");
+                  //   });
                 }}
                 autoStart={true}
               />

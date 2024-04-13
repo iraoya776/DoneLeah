@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
   },
   lastBtn: {
     //borderWidth: 1,
-    padding: 7,
+    padding: 8,
     borderRadius: 10,
     //borderColor: Themes.colors.primary,
     backgroundColor: Themes.colors.primary,

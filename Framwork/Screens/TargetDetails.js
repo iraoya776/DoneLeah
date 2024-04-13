@@ -30,6 +30,7 @@ import {
   faPlus,
   faPlusSquare,
   faShare,
+  faTrashCan,
   faUserClock,
   faUserGroup,
   faXmarkCircle,
@@ -58,6 +59,7 @@ import { errorMessage } from "../Components/formatErrorMessage";
 import { getAdditionalUserInfo } from "firebase/auth";
 import Carousel from "react-native-reanimated-carousel";
 import { ScrollView } from "react-native-virtualized-view";
+import { Rating, AirbnbRating } from "react-native-ratings";
 
 export function TargetDetails() {
   const navigation = useNavigation();
@@ -163,7 +165,7 @@ export function TargetDetails() {
       );
     } else if (querySnapshot.empty === false) {
       setPreloader(false);
-      Alert.alert("Message!", "document already exists");
+      Alert.alert("Message!", "product already exists in cart");
     } else if (querySnapshot.empty === true) {
       //console.log("Document is available");
       const groupCollection = collection(db, "cart");
@@ -223,8 +225,7 @@ export function TargetDetails() {
 
   const [commentColours, setCommentColours] = useState("black");
   const [message, setmessage] = useState("");
-  const [group, displayGroup] = useState(false);
-  const [groupColor, setGroupColor] = useState("black");
+  const [productComments, setProductComments] = useState([]);
 
   useEffect(() => {
     async function checkWishlist() {
@@ -241,22 +242,74 @@ export function TargetDetails() {
       }
     }
     checkWishlist();
-    const getColl = async () => {
-      const q = collection(db, "cart");
-      const filter = query(
-        q,
-        where("groupName", "==", groupInfo),
-        where("targetID", "==", targetID)
-      );
+
+    async function checkQ() {
+      const q = collection(db, "comments");
+      const filter = query(q, where("targetID", "==", targetID));
       const querySnapshot = await getDocs(filter);
-      if (querySnapshot.empty === true) {
-        setGroupColor("black");
-      } else if (querySnapshot.empty === false) {
-        setGroupColor(Themes.colors.blueLight);
-      }
-    };
-    getColl();
+      const allData = [];
+      querySnapshot.forEach((all) => {
+        allData.push({ ...all.data(), commentID: all.id });
+      });
+      allData.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      });
+      setProductComments(allData);
+    }
+    checkQ();
   }, []);
+
+  const [rated, setRated] = useState(0);
+
+  async function ratingCompleted(rating) {
+    setRated(rating);
+    console.log(rating);
+    const q = collection(db, "comments");
+    const filter = query(
+      q,
+      where("targetID", "==", targetID),
+      where("userUID", "==", userUID)
+    );
+    const querySnapshot = await getDocs(filter);
+    const allData = [];
+    querySnapshot.forEach((all) => {
+      allData.push(all.data());
+    });
+
+    const reviews = [
+      " ❤ " + " (terrible)",
+      " ❤ ❤ " + " (bad)",
+      "❤ ❤ ❤ " + " (Ok)",
+      "❤ ❤ ❤ ❤ " + " (good)",
+      "❤ ❤ ❤ ❤ ❤ " + "(very good)",
+      "❤ ❤ ❤ ❤ ❤ ❤ " + " (amazing)",
+      "❤ ❤ ❤ ❤ ❤ ❤ ❤ " + "(awesome)",
+    ];
+    if (allData.length === 3) {
+      Alert.alert(
+        "Unsuccesful",
+        "You cannot have more than 3 reviews for an item",
+        [{ text: "Ok" }]
+      );
+    } else if (allData.length < 4) {
+      const myDocumentData = {
+        targetID,
+        userUID,
+        image: userInfo.image,
+        name: userInfo.firstName + " " + userInfo.lastName,
+        rated: reviews[rating],
+        createdAt: new Date().getTime(),
+      };
+      const myDocRef = collection(db, "comments");
+      addDoc(myDocRef, myDocumentData)
+        .then(() => {
+          Alert.alert("Succesful", "comment has been added successfully");
+        })
+        .catch(() => {
+          //console.log("unsuccessful");
+        });
+    }
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -452,8 +505,8 @@ export function TargetDetails() {
             </View>
             <Text
               style={{
-                fontFamily: Themes.fonts.text700,
-                fontSize: 18,
+                fontFamily: Themes.fonts.text500,
+                fontSize: 15,
                 marginTop: 10,
               }}
             >
@@ -468,6 +521,104 @@ export function TargetDetails() {
             >
               {description}
             </Text>
+          </View>
+          <View style={{ marginTop: 20 }}>
+            <AirbnbRating
+              count={6}
+              reviews={[
+                "Terrible",
+                "Bad",
+                "OK",
+                "Good",
+                "Very Good",
+                "Amazing",
+                "Awesome",
+              ]}
+              defaultRating={rated + 1}
+              size={20}
+              reviewColor={Themes.colors.primary}
+              onFinishRating={ratingCompleted}
+            />
+            <View>
+              <FlatList
+                data={productComments}
+                renderItem={({ item }) => {
+                  return (
+                    <View
+                      style={{
+                        marginVertical: 10,
+                        flexDirection: "row",
+                        columnGap: 10,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Image
+                        source={{ uri: item.image }}
+                        style={{ width: 30, height: 30, borderRadius: 40 }}
+                      />
+                      <View>
+                        <Text style={{ fontFamily: Themes.fonts.text200 }}>
+                          {item.name}
+                        </Text>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "flex-end",
+                            justifyContent: "space-between",
+                            //borderWidth: 1,
+                            width: "93%",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: Themes.fonts.text400,
+                              //fontSize: 16,
+                            }}
+                          >
+                            {item.rated}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => {
+                              function deleteComment(id) {
+                                if (item.userUID === userUID) {
+                                  //console.log("comment owner");
+                                  setPreloader(true);
+                                  deleteDoc(doc(db, "comments", id))
+                                    .then(() => {
+                                      setPreloader(false);
+                                      Alert.alert(
+                                        "successful",
+                                        "comment has been deleted"
+                                      );
+                                    })
+                                    .catch(() => {
+                                      setPreloader(false);
+                                      //console.log("something went wrong");
+                                      Alert.alert(
+                                        "unsuccesful",
+                                        "comment could not be deleted"
+                                      );
+                                    });
+                                } else {
+                                  setPreloader(false);
+                                  Alert.alert(
+                                    "Unsuccesful",
+                                    "comment can only be deleted by comment's owner"
+                                  );
+                                }
+                              }
+                              deleteComment(item.commentID);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrashCan} size={13} />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  );
+                }}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>

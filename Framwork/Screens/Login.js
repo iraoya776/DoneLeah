@@ -120,9 +120,11 @@ export function Login({ navigation, route }) {
                   </Text>
                   <TouchableOpacity
                     style={styles.input}
-                    onPress={() => Alert.alert("Whatsapp my nigga")}
+                    onPress={() => navigation.navigate("ForgotPassword")}
                   >
-                    <Text style={styles.txt}>Forgot Password?</Text>
+                    <Text style={[styles.txt, { color: Themes.colors.red }]}>
+                      Forgot Password?
+                    </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -131,7 +133,7 @@ export function Login({ navigation, route }) {
                   >
                     <Text
                       style={{
-                        fontSize: 16,
+                        fontSize: 18,
                         color: "white",
                         fontFamily: Themes.fonts.text600,
                       }}
@@ -151,8 +153,8 @@ export function Login({ navigation, route }) {
             <Text
               style={{
                 color: Themes.colors.primary,
-                fontFamily: Themes.fonts.text600,
-                fontSize: 16,
+                fontFamily: Themes.fonts.text800,
+                fontSize: 18,
               }}
             >
               Sign-Up
@@ -182,11 +184,12 @@ const styles = StyleSheet.create({
   inputDesign: {
     borderColor: "gray",
     borderWidth: 1,
-    padding: 3,
+    padding: 5,
     marginBottom: 10,
     borderRadius: 10,
     width: "100%",
     fontSize: 18,
+    paddingLeft: 10,
   },
   input: {
     //backgroundColor: "red",

@@ -32,6 +32,7 @@ import {
   collection,
   deleteDoc,
   getDocs,
+  onSnapshot,
   query,
   where,
 } from "firebase/firestore";
@@ -114,13 +115,25 @@ export function ActiveTargets() {
       const querySnapshot = await getDocs(filter);
       const allData = [];
 
+      const allDocs = [];
+      onSnapshot(filter, (snapshot) => {
+        snapshot.forEach((item) => {
+          allDocs.push(item.data());
+        });
+      });
+
       querySnapshot.forEach((all) => {
         allData.push(all.data());
       });
       const sum = allData.reduce((all, items) => {
         return all + items.amount;
       }, 0);
+      // const sum2 = allDocs.reduce((all, items) => {
+      //   return all + items.amount;
+      // }, 0);
+
       setConstructedBalance(total - sum);
+      //console.log(sum);
     }
     getQ();
   });

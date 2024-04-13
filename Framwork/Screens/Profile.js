@@ -75,6 +75,13 @@ export function Profile() {
         // An error happened.
       });
   }
+
+  useEffect(() => {
+    const getQ = async () => {
+      const q = collection(db, "orders");
+    };
+  });
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar
@@ -91,92 +98,56 @@ export function Profile() {
         >
           <View
             style={{
-              marginBottom: 10,
               flexDirection: "row",
               alignItems: "center",
-              //borderWidth: 1,
-              justifyContent: "space-between",
+              //alignSelf: "center",
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                source={{
-                  uri:
-                    userInfo.image ||
-                    "https://img.freepik.com/free-photo/portrait-cool-man-with-sunglasses-dancing_23-2148851011.jpg?w=360&t=st=1708073800~exp=1708074400~hmac=cc3a95cbdfde08834fa4b22980fa082ffc907a3928c3eb1b6149240ae445ad38",
-                }}
-                style={{ width: 40, height: 40, borderRadius: 40 }}
-              />
-              <Text style={{ fontSize: 18, fontFamily: Themes.fonts.text700 }}>
-                {"  "}
-                {userInfo.firstName}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("EditProfile")}
-            >
-              <FontAwesomeIcon icon={faUserPen} size={22} />
-            </TouchableOpacity>
+            <Image
+              source={{
+                uri:
+                  userInfo.image ||
+                  "https://img.freepik.com/free-photo/portrait-cool-man-with-sunglasses-dancing_23-2148851011.jpg?w=360&t=st=1708073800~exp=1708074400~hmac=cc3a95cbdfde08834fa4b22980fa082ffc907a3928c3eb1b6149240ae445ad38",
+              }}
+              style={{ width: 40, height: 40, borderRadius: 40 }}
+            />
+            <Text style={{ fontSize: 18, fontFamily: Themes.fonts.text800 }}>
+              {"  "}
+              {userInfo.firstName}
+            </Text>
           </View>
 
           <View
             style={{
-              //marginTop: 5,
-              //borderWidth: 1,
-              height: 100,
-              backgroundColor: Themes.colors.greenDark,
-              padding: 10,
-              justifyContent: "center",
-              //alignItems: "center",
-              borderRadius: 10,
-            }}
-          >
-            <Text style={{ color: "white" }}>Balance:</Text>
-            <Text
-              style={{
-                fontFamily: Themes.fonts.text800,
-                color: "white",
-                fontSize: 20,
-                //alignSelf: "center",
-                //marginTop: 5,
-              }}
-            >
-              ₦ {userInfo.balance}
-            </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("History")}
-              style={{
-                backgroundColor: "white",
-                padding: 2,
-                width: "50%",
-                alignSelf: "flex-end",
-                borderRadius: 20,
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: Themes.fonts.text500,
-                  fontSize: 15,
-                  textAlign: "center",
-                }}
-              >
-                Transaction History
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              marginTop: 15,
+              marginTop: 25,
             }}
           >
             <View
               style={{
                 //borderWidth: 1,
-                height: "84.5%",
+                height: "95.5%",
                 justifyContent: "space-between",
+                padding: 10,
               }}
             >
-              {/* <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("EditProfile")}
+              >
+                <View style={styles.design}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      columnGap: 15,
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faUserPen} size={20} />
+                    <Text style={styles.txt}>Edit Profile</Text>
+                  </View>
+                  <FontAwesomeIcon icon={faChevronRight} size={18} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
                 <View style={styles.design}>
                   <View
                     style={{
@@ -186,11 +157,11 @@ export function Profile() {
                     }}
                   >
                     <FontAwesomeIcon icon={faFolderOpen} size={20} />
-                    <Text style={styles.txt}>Orders</Text>
+                    <Text style={styles.txt}>Transaction History</Text>
                   </View>
                   <FontAwesomeIcon icon={faChevronRight} size={18} />
                 </View>
-              </TouchableOpacity> */}
+              </TouchableOpacity>
               {/* <TouchableOpacity onPress={() => navigation.navigate("History")}>
                 <View style={styles.design}>
                   <View

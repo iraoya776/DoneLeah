@@ -142,6 +142,9 @@ export function Orders() {
                         <Text style={{ fontFamily: Themes.fonts.text400 }}>
                           {item.address}
                         </Text>
+                        <Text style={{ textAlign: "right" }}>
+                          {"{Processing}"}
+                        </Text>
                       </View>
                     </View>
                   </View>

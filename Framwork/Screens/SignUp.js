@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     //borderColor: Themes.colors.primary,
     fontSize: 18,
     marginBottom: 5,
+    paddingLeft: 10,
   },
   txt: {
     fontFamily: Themes.fonts.text400,
