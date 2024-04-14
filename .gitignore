@@ -37,3 +37,4 @@ yarn-error.*
 
 #ignoredFiles
 APIKeys.Key.js
+Firebase/APIKeys.Key.js
