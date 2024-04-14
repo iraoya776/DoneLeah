@@ -36,10 +36,10 @@ export function Login({ navigation, route }) {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <View style={{ alignItems: "center" }}>
-          <Image
+          {/* <Image
             source={require("../../assets/leahLogo.png")}
             style={styles.ImgDesign}
-          />
+          /> */}
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}

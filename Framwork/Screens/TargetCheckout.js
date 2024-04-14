@@ -65,11 +65,7 @@ export function TargetCheckout() {
   useEffect(() => {
     const getQ = async () => {
       const q = collection(db, "targetDetails");
-      const filter = query(
-        q,
-        where("userUID", "==", userUID),
-        where("targetName", "==", targetName)
-      );
+      const filter = query(q, where("targetName", "==", targetName));
       const querySnapshot = await getDocs(filter);
       const allData = [];
       querySnapshot.forEach((all) => {
@@ -271,6 +267,7 @@ export function TargetCheckout() {
                       deliveryFee,
                       interest: Number(value.amount) * 0.018,
                       goodsPrice,
+                      amountRaised,
                     });
                     //console.log("Good");
                   } else {

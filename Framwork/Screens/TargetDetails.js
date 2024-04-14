@@ -603,7 +603,7 @@ export function TargetDetails() {
                                   setPreloader(false);
                                   Alert.alert(
                                     "Unsuccesful",
-                                    "comment can only be deleted by comment's owner"
+                                    "comment can only be deleted by owner"
                                   );
                                 }
                               }

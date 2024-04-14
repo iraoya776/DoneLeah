@@ -33,7 +33,7 @@ export function StackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="IntroScreen"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="IntroScreen" component={IntroScreen} />

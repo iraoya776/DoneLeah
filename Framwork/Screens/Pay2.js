@@ -56,7 +56,8 @@ export function Pay2() {
 
   const navigation = useNavigation();
   const route = useRoute();
-  const { amount, targetName, total, deliveryFee, interest } = route.params;
+  const { amount, targetName, total, deliveryFee, interest, amountRaised } =
+    route.params;
   const [contsructedBalance, setConstructedBalance] = useState(0);
   const [balance, setBalance] = useState(0);
 
@@ -152,21 +153,21 @@ export function Pay2() {
                       //console.log("unsuccessful");
                     });
 
-                  // const myDocumentData2 = {
-                  //   balance: contsructedBalance + Number(myDocumentData.amount),
-                  // };
-                  // const docRef = doc(db, "users", userUID);
-                  // setPreloader(false);
-                  // setDoc(docRef, myDocumentData2, { merge: true })
-                  //   .then(() => {
-                  //     setPreloader(false);
-                  //     navigation.goBack();
-                  //     //console.log("successful");
-                  //   })
-                  //   .catch(() => {
-                  //     setPreloader(false);
-                  //     //console.log("unsuccessful");
-                  //   });
+                  const myDocumentData2 = {
+                    balance: Number(amountRaised) - Number(userInfo.balance),
+                  };
+                  const docRef = doc(db, "users", userUID);
+                  setPreloader(false);
+                  setDoc(docRef, myDocumentData2, { merge: true })
+                    .then(() => {
+                      setPreloader(false);
+                      navigation.goBack();
+                      //console.log("successful");
+                    })
+                    .catch(() => {
+                      setPreloader(false);
+                      //console.log("unsuccessful");
+                    });
                 }}
                 autoStart={true}
               />

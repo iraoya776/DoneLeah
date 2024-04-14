@@ -22,6 +22,7 @@ import {
   faArrowRight,
   faChevronRight,
   faCreditCard,
+  faEyeSlash,
   faFolderOpen,
   faHeart,
   faInfoCircle,
@@ -47,6 +48,7 @@ import {
 import { query } from "firebase/database";
 import { useNavigation } from "@react-navigation/native";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function Profile() {
   const navigation = useNavigation();
@@ -76,10 +78,31 @@ export function Profile() {
       });
   }
 
+  const [val, setVal] = useState(userInfo.balance);
+  const [recent, setRecent] = useState(false);
+  const [myVal, setMyVal] = useState(false);
+
   useEffect(() => {
     const getQ = async () => {
       const q = collection(db, "orders");
     };
+
+    const getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem("visible");
+        const updatedVal = JSON.parse(value);
+      } catch (e) {
+        // error reading value...
+      }
+    };
+    getData();
+
+    if (myVal === false) {
+      setVal(userInfo.balance);
+    } else if (myVal !== false) {
+      //console.log("true");
+      setVal("********");
+    }
   });
 
   return (
@@ -116,6 +139,97 @@ export function Profile() {
               {userInfo.firstName}
             </Text>
           </View>
+          <View
+            style={{
+              borderWidth: 1,
+              marginTop: 5,
+              height: 115,
+              borderBottomRightRadius: 40,
+              borderTopLeftRadius: 40,
+              padding: 10,
+              backgroundColor: Themes.colors.greenDark,
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{ color: "white", fontFamily: Themes.fonts.text400 }}
+              >
+                Balance:{"  "}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  const storeData = async (value) => {
+                    try {
+                      await AsyncStorage.setItem(
+                        "visible",
+                        JSON.stringify(false)
+                      );
+                      const value = await AsyncStorage.getItem("visible");
+                      const updatedVal = JSON.parse(value);
+                      //console.log(updatedVal === false);
+                      if (myVal === false) {
+                        await AsyncStorage.setItem(
+                          "visible",
+                          JSON.stringify(!false)
+                        );
+                        const value2 = await AsyncStorage.getItem("visible");
+                        const updatedVal2 = JSON.parse(value2);
+                        setMyVal(updatedVal2);
+                        //console.log(updatedVal2);
+                        //console.log("Hey");
+                      } else if (myVal === true) {
+                        //console.log("hello");
+
+                        await AsyncStorage.setItem(
+                          "visible",
+                          JSON.stringify(!true)
+                        );
+                        const value2 = await AsyncStorage.getItem("visible");
+                        const updatedVal2 = JSON.parse(value2);
+                        setMyVal(updatedVal2);
+                      }
+                    } catch (e) {
+                      // saving error
+                    }
+                  };
+                  storeData();
+                }}
+              >
+                <FontAwesomeIcon icon={faEyeSlash} size={20} color="white" />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                fontFamily: Themes.fonts.text800,
+                fontSize: 18,
+                textAlign: "center",
+                color: "white",
+              }}
+            >
+              ₦ {val <= 0 ? 0 : val}
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("History")}
+              style={{
+                backgroundColor: "white",
+                alignSelf: "flex-end",
+                borderRadius: 10,
+                margin: 3,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: Themes.fonts.text500,
+                  fontSize: 16,
+                  color: Themes.colors.greenDark,
+                }}
+              >
+                Transaction History
+              </Text>
+            </TouchableOpacity>
+          </View>
 
           <View
             style={{
@@ -147,7 +261,7 @@ export function Profile() {
                   <FontAwesomeIcon icon={faChevronRight} size={18} />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              {/* <TouchableOpacity>
                 <View style={styles.design}>
                   <View
                     style={{
@@ -161,7 +275,7 @@ export function Profile() {
                   </View>
                   <FontAwesomeIcon icon={faChevronRight} size={18} />
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               {/* <TouchableOpacity onPress={() => navigation.navigate("History")}>
                 <View style={styles.design}>
                   <View

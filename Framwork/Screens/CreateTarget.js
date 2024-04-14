@@ -117,24 +117,22 @@ export function CreateTarget() {
                   collection(db, "groupForTargets"),
                   where("groupName", "==", value.targetName)
                 );
-                const q2 = collection(db, "setActiveTargets");
+                const q2 = collection(db, "targetDetails");
                 const filter = query(
                   q2,
                   where("targetName", "==", value.targetName)
                 );
-                const filter2 = query(q2, where("userUID", "==", userUID));
+                //const filter2 = query(q2, where("userUID", "==", userUID));
                 const querySnapshot = await getDocs(filter);
-                const querySnapshot2 = await getDocs(filter2);
+                //const querySnapshot2 = await getDocs(filter2);
                 const querySnapshot3 = await getDocs(qColl);
-                if (
-                  querySnapshot.empty === false ||
-                  querySnapshot2.empty === false ||
-                  querySnapshot3.empty === false
-                ) {
-                  console.log("Doc already exist");
+                if (querySnapshot3.empty === false) {
+                  Alert.alert(
+                    "Unsuccessful",
+                    `${value.targetName} already exist`
+                  );
                 } else if (
                   querySnapshot.empty === true &&
-                  querySnapshot2.empty === true &&
                   querySnapshot3.empty === true
                 ) {
                   const myDocumentData = {
